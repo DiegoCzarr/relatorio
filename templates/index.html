@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>Sistema Flask com Excel</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <div class="upload">
+        <h2>Upload do Arquivo</h2>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx">
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    {% if total_rows is not none %}
+
+        <h1>Relatorio</h1>
+        <div class="total">
+            <h2>{{ total_rows }}</h2>
+            <p>Número de Disparos</p>
+        </div>
+
+        <div class="dados">
+            <div class="tabela">
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in table_data %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                 </table>
+            </div>
+            <div class="grafico">
+                <h3>Gráfico de Pizza</h3>
+                <div id="chart"></div>
+                <script>
+                    var graph = {{ graph_json | safe }};
+                    Plotly.newPlot('chart', graph);
+                </script>
+            </div>
+        </div>
+
+    {% endif %}
+</body>
+</html>
